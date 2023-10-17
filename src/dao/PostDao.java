@@ -31,22 +31,25 @@ public class PostDao {
         statement.close();
     }
 	
-	public ArrayList<String> getPosts() throws SQLException {
-		ArrayList<String> posts = new ArrayList<>();
+	public ArrayList<Post> getPosts() throws SQLException {
+		ArrayList<Post> posts = new ArrayList<>();
         String query = "SELECT * FROM posts";
 
         PreparedStatement statement = connection.prepareStatement(query);
         ResultSet resultSet = statement.executeQuery();
         
         while (resultSet.next()) {
-        	String author = resultSet.getString("author");
-        	posts.add(author);
-//        	String firstName = resultSet.getString("firstName");
-//        	String lastName = resultSet.getString("lastName");
-//        	String role = resultSet.getString("role");
-//        	User user = new User(username, password, firstName, lastName, role);
-//            statement.close();
-//            return user;
+        	String ID = resultSet.getString("ID");
+        	String username = resultSet.getString("author");
+        	String content = resultSet.getString("content");
+        	int likes = resultSet.getInt("likes");
+        	int shares = resultSet.getInt("shares");
+        	String dateTime = resultSet.getString("dateTime");
+        	
+        	UserDao userDao = new UserDao(connection);
+        	User author = userDao.getUser(username);
+        	
+        	posts.add(new Post(ID, author, content, likes, shares, dateTime));
         }
         
         return posts;

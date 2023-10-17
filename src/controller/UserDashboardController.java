@@ -31,18 +31,15 @@ public class UserDashboardController implements Initializable {
 	private Label usernameGreetingLabel;
 	
 	@FXML
-	private TableView<User> table;
+	private TableView<Post> postsTable;
 	
 	@FXML
-	private TableColumn<User, String> firstName;
+	private TableColumn<Post, String> IDColumn, authorColumn, contentColumn, dateTimeColumn;
 	
 	@FXML
-	private TableColumn<User, String> lastName;
+	private TableColumn<Post, Integer> likesColumn, sharesColumn;
 	
-	ObservableList<User> list = FXCollections.observableArrayList(
-				new User("sdjfkds", "sdkjf", "ksdjf", "skdjf", "sdjf")
-			);
-	
+	ObservableList<Post> posts = FXCollections.observableArrayList();
 	private static String username;
 	
 	public static String getUsername() {
@@ -77,20 +74,24 @@ public class UserDashboardController implements Initializable {
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		firstName.setCellValueFactory(new PropertyValueFactory<User, String>("firstName"));
-		lastName.setCellValueFactory(new PropertyValueFactory<User, String>("lastName"));
+		IDColumn.setCellValueFactory(new PropertyValueFactory<Post, String>("id"));
+		authorColumn.setCellValueFactory(new PropertyValueFactory<Post, String>("author"));
+		contentColumn.setCellValueFactory(new PropertyValueFactory<Post, String>("content"));
+		likesColumn.setCellValueFactory(new PropertyValueFactory<Post, Integer>("likes"));
+		sharesColumn.setCellValueFactory(new PropertyValueFactory<Post, Integer>("shares"));
+		dateTimeColumn.setCellValueFactory(new PropertyValueFactory<Post, String>("dateTime"));
 		
 		Connection conn = DatabaseConnection.getConnection();
 		PostDao postDao = new PostDao(conn);
+		
 		try {
-			ArrayList<String> posts = postDao.getPosts();
-			System.out.println(posts.size());
-			list.add(new User("jsdkf", "sdf", "skdjf", "jdsf", "sdf"));
+			ArrayList<Post> postsResult = postDao.getPosts();
+			
+			posts.addAll(postsResult);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
-		table.setItems(list);
+		postsTable.setItems(posts);
 	}
 }

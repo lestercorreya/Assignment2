@@ -13,3 +13,39 @@
 .button:pressed {
     -fx-background-color: #1f6481;
 }
+
+/* Define styles for the TableView itself */
+.table-view {
+    -fx-background-color: white;
+}
+
+.table-view .column-header {
+    -fx-background-color: #FFFFFF;
+    -fx-padding: 15px;
+}
+
+.table-cell {
+	-fx-alignment: CENTER;
+    -fx-padding: 15px;
+}
+
+.table-row-cell {
+    -fx-background-color: #FFFFFF;
+}
+
+.table-row-cell:selected {
+    -fx-background-color: #0073e6;
+    -fx-text-fill: white; 
+}
+
+.table-row-cell:hover {
+    -fx-background-color: #d1d1d1; 
+}
+
+.scroll-bar {
+    -fx-background-color: #FFFFFF; 
+}
+
+.scroll-bar .thumb {
+    -fx-background-color: #2980b9; 
+}
