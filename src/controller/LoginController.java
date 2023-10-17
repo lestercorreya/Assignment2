@@ -2,11 +2,10 @@ package controller;
 
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import application.DatabaseConnection;
+import dao.UserDao;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -49,7 +48,6 @@ public class LoginController {
 	@FXML
 	private void login(ActionEvent event) {
 		try {
-			Connection conn = DatabaseConnection.getConnection();
 			String username = usernameField.getText();
 			String password = passwordField.getText();
 			
@@ -58,24 +56,20 @@ public class LoginController {
 				return;
 			}
 			
-			String sql = "SELECT * FROM users WHERE username = ? AND password = ?";
-			PreparedStatement statement = conn.prepareStatement(sql);
-			statement.setString(1, username);
-			statement.setString(2, password);
 
-	        // Execute the query to insert the data
-	        ResultSet resultSet = statement.executeQuery();
-	        
-            if (resultSet.next()) {
-                UserDashboardController userDashboardController = new UserDashboardController();
-                UserDashboardController.setUsername(username);
-                userDashboardController.openUserDashboard(event);
-            } else {
-                errorText.setText("Invalid login credentials.");
-            }
-	        
+			Connection conn = DatabaseConnection.getConnection();
+			UserDao userDao = new UserDao(conn);
+		    
+		    if (userDao.getUser(username, password) == null) {
+		    	errorText.setText("Invalid login credentials!");
+		    	conn.close();
+				return;
+		    }
+		    
+			UserDashboardController userDashboardController = new UserDashboardController();
+            UserDashboardController.setUsername(username);
+            userDashboardController.openUserDashboard(event);
             
-	        statement.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

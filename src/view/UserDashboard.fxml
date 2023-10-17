@@ -3,6 +3,8 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
@@ -19,19 +21,27 @@
             </Label>
          </children>
       </Pane>
-      <Label layoutX="22.0" layoutY="87.0" text="Hello, Lester" fx:id="usernameGreetingLabel">
+      <Label fx:id="usernameGreetingLabel" layoutX="22.0" layoutY="87.0" text="Hello, Lester">
          <font>
             <Font size="24.0" />
          </font></Label>
       <HBox layoutX="-2.0" layoutY="558.0" prefHeight="42.0" prefWidth="800.0" style="-fx-background-color: #f5f5f5; -fx-alignment: center; -fx-spacing: 20px;">
          <children>
             <Button mnemonicParsing="false" text="Edit Profile" />
-            <Button mnemonicParsing="false" text="Add Post" onAction="#handleAddPost"/>
+            <Button mnemonicParsing="false" onAction="#handleAddPost" text="Add Post" />
             <Button mnemonicParsing="false" text="Export" />
             <Button mnemonicParsing="false" text="Log out" />
          </children>
       </HBox>
-      <ScrollPane layoutX="-2.0" layoutY="134.0" prefHeight="381.0" prefWidth="800.0" />
+      <ScrollPane layoutX="-2.0" layoutY="134.0" prefHeight="381.0" prefWidth="800.0">
+         <content>
+            <TableView prefHeight="378.0" prefWidth="798.0" fx:id="table">
+              <columns>
+                <TableColumn prefWidth="75.0" text="C1" fx:id="firstName"/>
+                <TableColumn prefWidth="75.0" text="C2" fx:id="lastName"/>
+              </columns>
+            </TableView>
+         </content></ScrollPane>
       <HBox layoutY="515.0" prefHeight="42.0" prefWidth="800.0" style="-fx-background-color: #f5f5f5; -fx-alignment: center; -fx-spacing: 20px;">
          <children>
             <Button mnemonicParsing="false" text="Retrieve Top N Posts" />

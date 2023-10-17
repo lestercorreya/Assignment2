@@ -28,7 +28,7 @@ public class UserDao {
         statement.close();
     }
 	
-	public User getUserByUsername(String username) throws SQLException {
+	public User getUser(String username) throws SQLException {
         String query = "SELECT * FROM users WHERE username = ?";
 
         PreparedStatement statement = connection.prepareStatement(query);
@@ -37,6 +37,26 @@ public class UserDao {
         
         if (resultSet.next()) {
         	String password = resultSet.getString("password");
+        	String firstName = resultSet.getString("firstName");
+        	String lastName = resultSet.getString("lastName");
+        	String role = resultSet.getString("role");
+        	User user = new User(username, password, firstName, lastName, role);
+            statement.close();
+            return user;
+        }
+        
+        return null;
+    }
+	
+	public User getUser(String username, String password) throws SQLException {
+        String query = "SELECT * FROM users WHERE username = ? and password = ?";
+
+        PreparedStatement statement = connection.prepareStatement(query);
+        statement.setString(1, username);
+        statement.setString(2, password);
+        ResultSet resultSet = statement.executeQuery();
+        
+        if (resultSet.next()) {
         	String firstName = resultSet.getString("firstName");
         	String lastName = resultSet.getString("lastName");
         	String role = resultSet.getString("role");

@@ -70,7 +70,7 @@ public class SignupController {
 			Connection conn = DatabaseConnection.getConnection();
 		    UserDao userDao = new UserDao(conn);
 		    
-		    if (userDao.getUserByUsername(username) != null) {
+		    if (userDao.getUser(username) != null) {
 		    	errorText.setText("A user with this username already exists!");
 		    	conn.close();
 				return;

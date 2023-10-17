@@ -77,7 +77,7 @@ public class AddPostController {
 	        
 			Connection conn = DatabaseConnection.getConnection();
 			UserDao userDao = new UserDao(conn);
-			User user = userDao.getUserByUsername(UserDashboardController.getUsername());
+			User user = userDao.getUser(UserDashboardController.getUsername());
 			PostDao postDao = new PostDao(conn);
 			
 			UUID uniqueID = UUID.randomUUID();
