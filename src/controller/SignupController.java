@@ -2,11 +2,10 @@ package controller;
 
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import application.DatabaseConnection;
+import dao.UserDao;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -17,6 +16,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import model.User;
 
 public class SignupController {
     //	claiming access to the fxml variables
@@ -26,8 +26,6 @@ public class SignupController {
 	private PasswordField passwordField, confirmPasswordField;
 	@FXML
 	private Label errorText;
-	
-	private LoginController loginController;
 	
 	// functions
 	
@@ -48,8 +46,6 @@ public class SignupController {
 	@FXML
 	private void signup(ActionEvent event) {
 		try {
-			//establishing connection to the database
-			Connection conn = DatabaseConnection.getConnection();
 			String username = usernameField.getText();
 			String firstName = firstNameField.getText();
 			String lastName = lastNameField.getText();
@@ -61,7 +57,6 @@ public class SignupController {
 				return;
 			}
 			
-			// check if the 2 passwords entered are the same
 			if (!password.equals(confirmPassword)) {
 				errorText.setText("Passwords don't match!");
 				return;
@@ -72,34 +67,22 @@ public class SignupController {
 				return;
 			}
 			
-			String sql = "SELECT * FROM users WHERE username = ?";
-			PreparedStatement statement = conn.prepareStatement(sql);
-			statement.setString(1, username);
-
-	        // Execute the query to insert the data
-	        ResultSet resultSet = statement.executeQuery();
-
-	        if (resultSet.next()) {
-                errorText.setText("username already exists!");
-                statement.close();
-                return;
-            }
+			Connection conn = DatabaseConnection.getConnection();
+		    UserDao userDao = new UserDao(conn);
+		    
+		    if (userDao.getUserByUsername(username) != null) {
+		    	errorText.setText("A user with this username already exists!");
+		    	conn.close();
+				return;
+		    }
+			
+		    User user = new User(username, password, firstName, lastName, "user");
+		    userDao.createUser(user);
+		    
+		    conn.close();
 	        
-			sql = "INSERT INTO users (username, password, firstName, lastName, role) VALUES (?, ?, ?, ?, ?)";
-			statement = conn.prepareStatement(sql);
-			statement.setString(1, username);
-	        statement.setString(2, password);
-	        statement.setString(3, firstName);
-	        statement.setString(4, lastName);
-	        statement.setString(5, "user");
-
-	        // Execute the query to insert the data
-	        statement.executeUpdate();
-
-	        // Close the resources
-	        statement.close();
-	        
-	        loginController.openLogin(event);
+	        LoginController loginController = new LoginController();
+			loginController.openLogin(event);
 	        
 		} catch (SQLException e) {
 			errorText.setText("There was an error in Signing Up. Please try again!");
@@ -110,7 +93,7 @@ public class SignupController {
 	
 	@FXML
 	private void handleLoginHyperlink(ActionEvent event) {
-		loginController = new LoginController();
+		LoginController loginController = new LoginController();
 		loginController.openLogin(event);
 	}
 }

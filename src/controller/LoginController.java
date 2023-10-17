@@ -68,7 +68,8 @@ public class LoginController {
 	        
             if (resultSet.next()) {
                 UserDashboardController userDashboardController = new UserDashboardController();
-                userDashboardController.openUserDashboard(event, username);
+                UserDashboardController.setUsername(username);
+                userDashboardController.openUserDashboard(event);
             } else {
                 errorText.setText("Invalid login credentials.");
             }

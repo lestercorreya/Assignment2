@@ -15,12 +15,22 @@ public class UserDashboardController {
 	@FXML
 	private Label usernameGreetingLabel;
 	
-	public void openUserDashboard(ActionEvent event, String username) {
+	private static String username;
+	
+	public static String getUsername() {
+		return username;
+	}
+	
+	public static void setUsername(String username) {
+		UserDashboardController.username = username;
+	}
+	
+	public void openUserDashboard(ActionEvent event) {
 		try {
 			FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/UserDashboard.fxml"));
 			Parent root = loader.load();
 			UserDashboardController userDashboardController = loader.getController();
-			userDashboardController.displayUsername(username);
+			userDashboardController.usernameGreetingLabel.setText("Hello, " + username);
 			Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
 			Scene scene = new Scene(root);
 			scene.getStylesheets().add(getClass().getResource("/styles/userDashboard.css").toExternalForm());
@@ -31,7 +41,9 @@ public class UserDashboardController {
 		}
 	}
 	
-	public void displayUsername(String username) {
-		usernameGreetingLabel.setText("Hello, " + username);
+	@FXML
+	private void handleAddPost(ActionEvent event) {
+		AddPostController addPostController = new AddPostController();
+		addPostController.openAddPost(event);
 	}
 }
