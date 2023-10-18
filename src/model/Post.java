@@ -7,6 +7,7 @@ public class Post {
     private int likes;
     private int shares;
     private String dateTime;
+    private String authorUsername;
 
     public Post(String id, User author, String content, int likes, int shares, String dateTime) {
         this.id = id;
@@ -15,6 +16,7 @@ public class Post {
         this.likes = likes;
         this.shares = shares;
         this.dateTime = dateTime;
+        this.authorUsername = author.getUsername();
     }
 
     // Getters and setters for each field
@@ -32,6 +34,8 @@ public class Post {
 
     public void setAuthor(User author) {
         this.author = author;
+        
+        this.authorUsername = author.getUsername();
     }
 
     public String getContent() {
@@ -64,5 +68,9 @@ public class Post {
 
     public void setDateTime(String dateTime) {
         this.dateTime = dateTime;
+    }
+    
+    public String getAuthorUsername() {
+    	return authorUsername;
     }
 }

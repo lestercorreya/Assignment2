@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.ResourceBundle;
 
 import application.DatabaseConnection;
@@ -25,7 +28,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import model.Post;
 
-public class RetrievePostController implements Initializable {
+public class RetrieveNPostsController implements Initializable{
 	@FXML
 	private TableView<Post> postsTable;
 	
@@ -36,19 +39,19 @@ public class RetrievePostController implements Initializable {
 	private TableColumn<Post, Integer> likesColumn, sharesColumn;
 	
 	@FXML
-	private TextField IDField;
+	private TextField NField;
 	
 	@FXML
 	private Label errorText;
 	
 	ObservableList<Post> posts = FXCollections.observableArrayList();
 	
-	public void openRetrievePost(ActionEvent event) {
+	public void openRetrieveNPosts(ActionEvent event) {
 		try {
-			Parent root = FXMLLoader.load(getClass().getResource("/view/RetrievePost.fxml"));
+			Parent root = FXMLLoader.load(getClass().getResource("/view/RetrieveNPosts.fxml"));
 			Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
 			Scene scene = new Scene(root);
-			scene.getStylesheets().add(getClass().getResource("/styles/retrievePost.css").toExternalForm());
+			scene.getStylesheets().add(getClass().getResource("/styles/retrieveNPosts.css").toExternalForm());
 			stage.setScene(scene);
 			stage.show();
 		} catch (IOException e) {
@@ -58,31 +61,45 @@ public class RetrievePostController implements Initializable {
 	}
 	
 	@FXML
-	private void retrievePost(ActionEvent event) {
+	private void retrievePosts(ActionEvent event) {
 		posts.clear();
 		errorText.setText(null);
 		try {
-			String ID = IDField.getText();
+			String N = NField.getText();
 			
-			if (ID.trim().length() == 0) {
+			if (N.trim().length() == 0) {
 				errorText.setText("All fields are mandatory");
+				return;
+			}
+			
+			String validNumberRegex = "^[0-9]+$";
+
+			if (!N.matches(validNumberRegex)) {
+				errorText.setText("N should be a valid number");
 				return;
 			}
 			
 			Connection conn = DatabaseConnection.getConnection();
 			PostDao postDao = new PostDao(conn);
 			
-			Post post = postDao.getPost(ID);
+			ArrayList<Post> resultPosts = postDao.getPosts();
 			
-			if (post == null) {
-				errorText.setText("Post with this ID doesn't exist!");
-				conn.close();
-				return;
-			}
+			Collections.sort(resultPosts, new Comparator<Post>() {
+	            @Override
+	            public int compare(Post post1, Post post2) {
+	                return post2.getLikes() - post1.getLikes();
+	            }
+	        });
 			
+			ArrayList<Post> topNPosts = new ArrayList<>();
+
+	        for (int i = 0; i < Integer.parseInt(N) && i < resultPosts.size(); i++) {
+	            topNPosts.add(resultPosts.get(i));
+	        }
+	        
 			conn.close();
 			
-			posts.add(post);
+			posts.addAll(topNPosts);
 		} catch (SQLException e) {
 			errorText.setText("An Error Occured!");
 			e.printStackTrace();

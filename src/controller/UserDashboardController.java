@@ -82,11 +82,17 @@ public class UserDashboardController implements Initializable {
 		RemovePostController removePostController = new RemovePostController();
 		removePostController.openRemovePost(event);
 	}
+	
+	@FXML
+	private void handleRetrieveNPosts(ActionEvent event) {
+		RetrieveNPostsController retrieveNPostsController = new RetrieveNPostsController();
+		retrieveNPostsController.openRetrieveNPosts(event);
+	}
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		IDColumn.setCellValueFactory(new PropertyValueFactory<Post, String>("id"));
-		authorColumn.setCellValueFactory(new PropertyValueFactory<Post, String>("author"));
+		authorColumn.setCellValueFactory(new PropertyValueFactory<Post, String>("authorUsername"));
 		contentColumn.setCellValueFactory(new PropertyValueFactory<Post, String>("content"));
 		likesColumn.setCellValueFactory(new PropertyValueFactory<Post, Integer>("likes"));
 		sharesColumn.setCellValueFactory(new PropertyValueFactory<Post, Integer>("shares"));

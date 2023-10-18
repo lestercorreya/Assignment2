@@ -36,11 +36,13 @@
       <ScrollPane layoutX="-2.0" layoutY="134.0" prefHeight="381.0" prefWidth="800.0">
          <content>
             <TableView fx:id="postsTable" prefHeight="378.0" prefWidth="798.0">
-              <Label text="No Posts">
+              <placeholder>
+               <Label text="No Posts">
                 <font>
                   <Font size="16" />
                 </font>
-              </Label>
+               </Label>
+              </placeholder>
               <columns>
                   <TableColumn fx:id="IDColumn" prefWidth="132.0" text="ID" />
                   <TableColumn fx:id="authorColumn" editable="false" minWidth="0.0" prefWidth="126.0" text="Author" />
@@ -56,7 +58,7 @@
          </content></ScrollPane>
       <HBox layoutY="515.0" prefHeight="42.0" prefWidth="800.0" style="-fx-background-color: #f5f5f5; -fx-alignment: center; -fx-spacing: 20px;">
          <children>
-            <Button mnemonicParsing="false" text="Retrieve Top N Posts" />
+            <Button mnemonicParsing="false" text="Retrieve Top N Posts" onAction="#handleRetrieveNPosts"/>
             <Button mnemonicParsing="false" text="Retrieve Post" onAction="#handleRetrievePost"/>
             <Button mnemonicParsing="false" text="Remove Post" onAction="#handleRemovePost"/>
          </children>
