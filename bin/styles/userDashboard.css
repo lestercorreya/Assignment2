@@ -6,6 +6,10 @@
     -fx-cursor: hand;
 }
 
+#upgradeButton {
+	-fx-background-color: #D10000;
+}
+
 .button:hover {
     -fx-background-color: #2980b9;
 }

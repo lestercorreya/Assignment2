@@ -8,6 +8,10 @@
 	-fx-background-color: #007acc, white;
 }
 
+.text-input, .text-input:focused {
+    -fx-prompt-text-fill: derive(-fx-control-inner-background, -30%);
+}
+
 .button {
     -fx-background-color: #3498db;
     -fx-text-fill: #ffffff; 

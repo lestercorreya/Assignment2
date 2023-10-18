@@ -28,6 +28,21 @@ public class UserDao {
         statement.close();
     }
 	
+	public void updateUser(User user, String username) throws SQLException {
+		String query = "UPDATE users SET username = ?, password = ?, firstName = ?, lastName = ?, role = ? WHERE username = ?";
+
+        PreparedStatement statement = connection.prepareStatement(query);
+        statement.setString(1, user.getUsername());
+        statement.setString(2, user.getPassword());
+        statement.setString(3, user.getFirstName());
+        statement.setString(4, user.getLastName());
+        statement.setString(5, user.getRole());
+        statement.setString(6, username);
+        statement.executeUpdate();
+        
+        statement.close();
+	}
+	
 	public User getUser(String username) throws SQLException {
         String query = "SELECT * FROM users WHERE username = ?";
 

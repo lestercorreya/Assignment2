@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane focusTraversable="true" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.EditProfileController">
+   <children>
+   	  <Pane prefHeight="70.0" prefWidth="800.0" style="-fx-background-color: #f5f5f5;">
+         <children>
+            <Label layoutX="308.0" layoutY="20.0" text="Assignment 2" textFill="#cc0630">
+               <font>
+                  <Font name="System Bold" size="24.0" />
+               </font>
+            </Label>
+            <Hyperlink focusTraversable="false" layoutX="28.0" layoutY="24.0" onAction="#handleBack" text="Back">
+               <font>
+                  <Font name="Fira Sans Bold" size="18.0" />
+               </font>
+            </Hyperlink>
+         </children>
+      </Pane>
+      <TextField fx:id="firstNameField" focusTraversable="false" layoutX="269.0" layoutY="101.0" promptText="Edit First Name">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </TextField>
+      <TextField fx:id="lastNameField" focusTraversable="false" layoutX="269.0" layoutY="159.0" promptText="Edit Last Name">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </TextField>
+      <TextField fx:id="usernameField" focusTraversable="false" layoutX="269.0" layoutY="222.0" promptText="Edit Username">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </TextField>
+      <PasswordField fx:id="passwordField" focusTraversable="false" layoutX="269.0" layoutY="287.0" promptText="Edit Password">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </PasswordField>
+      <PasswordField fx:id="confirmPasswordField" focusTraversable="false" layoutX="269.0" layoutY="350.0" promptText="Confirm New Password">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </PasswordField>
+      <Button focusTraversable="false" layoutX="345.0" layoutY="438.0" mnemonicParsing="false" onAction="#editProfile" text="Update Profile">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Button>
+      <HBox layoutY="533.0" prefHeight="70.0" prefWidth="800.0" style="-fx-alignment: center;">
+         <children>
+            <Label fx:id="errorText" alignment="CENTER">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label fx:id="successText" alignment="CENTER">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+         </children>
+      </HBox>
+   </children>
+</AnchorPane>

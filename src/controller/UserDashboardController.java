@@ -9,6 +9,7 @@ import java.util.ResourceBundle;
 
 import application.DatabaseConnection;
 import dao.PostDao;
+import dao.UserDao;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -18,12 +19,14 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import model.Post;
+import model.User;
 
 public class UserDashboardController implements Initializable {
 	@FXML
@@ -37,6 +40,9 @@ public class UserDashboardController implements Initializable {
 	
 	@FXML
 	private TableColumn<Post, Integer> likesColumn, sharesColumn;
+	
+	@FXML
+	private Button visualizeButton, upgradeButton, importButton;
 	
 	ObservableList<Post> posts = FXCollections.observableArrayList();
 	private static String username;
@@ -88,27 +94,57 @@ public class UserDashboardController implements Initializable {
 		RetrieveNPostsController retrieveNPostsController = new RetrieveNPostsController();
 		retrieveNPostsController.openRetrieveNPosts(event);
 	}
+	
+	@FXML
+	private void handleEditProfile(ActionEvent event) {
+		EditProfileController editProfileController = new EditProfileController();
+		editProfileController.openEditProfile(event);
+	}
+	
+	@FXML
+	private void handleLogout(ActionEvent event) {
+		UserDashboardController.setUsername(null);
+		LoginController loginController = new LoginController();
+		loginController.openLogin(event);
+	}
+	
+	@FXML
+	private void handleUpgrade(ActionEvent event) {
+		UpgradeController upgradeController = new UpgradeController();
+		upgradeController.openUpgrade(event);
+	}
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		IDColumn.setCellValueFactory(new PropertyValueFactory<Post, String>("id"));
-		authorColumn.setCellValueFactory(new PropertyValueFactory<Post, String>("authorUsername"));
-		contentColumn.setCellValueFactory(new PropertyValueFactory<Post, String>("content"));
-		likesColumn.setCellValueFactory(new PropertyValueFactory<Post, Integer>("likes"));
-		sharesColumn.setCellValueFactory(new PropertyValueFactory<Post, Integer>("shares"));
-		dateTimeColumn.setCellValueFactory(new PropertyValueFactory<Post, String>("dateTime"));
-		
-		Connection conn = DatabaseConnection.getConnection();
-		PostDao postDao = new PostDao(conn);
-		
 		try {
+			Connection conn = DatabaseConnection.getConnection();
+			
+			UserDao userDao = new UserDao(conn);
+			User user = userDao.getUser(username);
+			
+			if (user.getRole().equals("user")) {
+				visualizeButton.setVisible(false);
+				importButton.setVisible(false);
+				
+			} else {
+				upgradeButton.setVisible(false);
+			}
+			IDColumn.setCellValueFactory(new PropertyValueFactory<Post, String>("id"));
+			authorColumn.setCellValueFactory(new PropertyValueFactory<Post, String>("authorUsername"));
+			contentColumn.setCellValueFactory(new PropertyValueFactory<Post, String>("content"));
+			likesColumn.setCellValueFactory(new PropertyValueFactory<Post, Integer>("likes"));
+			sharesColumn.setCellValueFactory(new PropertyValueFactory<Post, Integer>("shares"));
+			dateTimeColumn.setCellValueFactory(new PropertyValueFactory<Post, String>("dateTime"));
+			
+			PostDao postDao = new PostDao(conn);
+			
 			ArrayList<Post> postsResult = postDao.getPosts();
 			
 			posts.addAll(postsResult);
+			
+			postsTable.setItems(posts);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
-		postsTable.setItems(posts);
 	}
 }
