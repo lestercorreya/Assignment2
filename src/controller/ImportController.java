@@ -89,6 +89,7 @@ public class ImportController {
 
 	    			if (!ID.matches(validNumberRegex) || !likes.matches(validNumberRegex) || !shares.matches(validNumberRegex)) {
 	    				errorText.setText("Invalid format error on post with ID: " + ID);
+	    				conn.close();
 	    				return;
 	    			}
 	    			
@@ -99,12 +100,19 @@ public class ImportController {
 	                    dateFormat.parse(dateTime);
 	                } catch (ParseException e) {
 	                	errorText.setText("Invalid format error on post with ID: " + ID);
+	                	conn.close();
 	    				return;
 	                }
 	                
 	    			UserDao userDao = new UserDao(conn);
 	    			
 	    			User user = userDao.getUser(author);
+	    			
+	    			if (user == null) {
+	    				errorText.setText("Author doesn't exist on post with ID: " + ID);
+	    				conn.close();
+	    				return;
+	    			}
 	                
 	                Post post = new Post(Integer.parseInt(ID), user, content, Integer.parseInt(likes), Integer.parseInt(shares), dateTime);
 	                
@@ -117,6 +125,7 @@ public class ImportController {
                     postDao.createPost(post);
                 }
 	            
+	            conn.close();
 	            successText.setText("Posts imported Successfully!");
 			} catch (IOException | SQLException e) {
 				errorText.setText("An Error occured while trying to import posts!");
