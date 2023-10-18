@@ -30,7 +30,7 @@
          <children>
             <Button mnemonicParsing="false" onAction="#handleEditProfile" text="Edit Profile" />
             <Button mnemonicParsing="false" onAction="#handleAddPost" text="Add Post" />
-            <Button mnemonicParsing="false" text="Export" />
+            <Button mnemonicParsing="false" text="Export" onAction="#handleExport"/>
             <Button mnemonicParsing="false" onAction="#handleLogout" text="Log out" />
          </children>
       </HBox>

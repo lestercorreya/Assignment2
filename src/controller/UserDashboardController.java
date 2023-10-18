@@ -113,6 +113,12 @@ public class UserDashboardController implements Initializable {
 		UpgradeController upgradeController = new UpgradeController();
 		upgradeController.openUpgrade(event);
 	}
+	
+	@FXML
+	private void handleExport(ActionEvent event) {
+		ExportController exportController = new ExportController();
+		exportController.openExport(event);
+	}
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
