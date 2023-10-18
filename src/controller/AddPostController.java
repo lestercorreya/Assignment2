@@ -103,9 +103,9 @@ public class AddPostController {
 	}
 	
 	private void emptyFields() {
-		contentField.setText(null);
-        likesField.setText(null);
-        sharesField.setText(null);
+		contentField.clear();
+        likesField.clear();
+        sharesField.clear();
         
         contentField.requestFocus();
 	}

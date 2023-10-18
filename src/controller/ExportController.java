@@ -93,7 +93,7 @@ public class ExportController {
 	        fileWriter.close();
 	        
 	        successText.setText("Post exported Successfully!");
-	        IDField.setText(null);
+	        IDField.clear();
 			 
 		} catch (SQLException | IOException e) {
 			e.printStackTrace();

@@ -44,6 +44,7 @@ public class RemovePostController {
 		
 		try {
 			String ID = IDField.getText();
+			String username = UserDashboardController.getUsername();
 			
 			if (ID.trim().length() == 0) {
 				errorText.setText("All fields are mandatory");
@@ -53,10 +54,10 @@ public class RemovePostController {
 			Connection conn = DatabaseConnection.getConnection();
 			PostDao postDao = new PostDao(conn);
 			
-			boolean deletionSuccess = postDao.deletePost(ID);
+			boolean deletionSuccess = postDao.deletePost(ID, username);
 			
 			if (!deletionSuccess) {
-				errorText.setText("Post with this ID doesn't exist!");
+				errorText.setText("Post with this ID doesn't exist or the post doesn't belong to you!");
 				conn.close();
 				return;
 			}
@@ -64,6 +65,8 @@ public class RemovePostController {
 			conn.close();
 			
 			successText.setText("Post Deleted Successfully!");
+			
+			IDField.clear();
 		} catch (SQLException e) {
 			errorText.setText("An Error Occured!");
 			e.printStackTrace();

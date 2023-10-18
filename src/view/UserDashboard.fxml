@@ -59,7 +59,7 @@
          </content></ScrollPane>
       <HBox layoutY="515.0" prefHeight="42.0" prefWidth="800.0" style="-fx-background-color: #f5f5f5; -fx-alignment: center; -fx-spacing: 20px;">
          <children>
-            <Button fx:id="visualizeButton" mnemonicParsing="false" text="Visualize" />
+            <Button fx:id="visualizeButton" mnemonicParsing="false" text="Visualize" onAction="#handleVisualize"/>
             <Button mnemonicParsing="false" onAction="#handleRetrieveNPosts" text="Retrieve Top N Posts" />
             <Button mnemonicParsing="false" onAction="#handleRetrievePost" text="Retrieve Post" />
             <Button mnemonicParsing="false" onAction="#handleRemovePost" text="Remove Post" />

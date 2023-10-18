@@ -31,11 +31,13 @@ public class PostDao {
         statement.close();
     }
 	
-	public boolean deletePost(String ID) throws SQLException {
-        String query = "DELETE FROM posts WHERE ID = ?";
+	public boolean deletePost(String ID, String username) throws SQLException {
+        String query = "DELETE FROM posts WHERE ID = ? and author = ?";
 
         PreparedStatement statement = connection.prepareStatement(query);
         statement.setString(1, ID);
+        statement.setString(2, username);
+        
         int rowsAffected = statement.executeUpdate();
         
         statement.close();
@@ -99,5 +101,16 @@ public class PostDao {
         statement.close();
         
         return null;
+	}
+	
+	public void changeUsername(String oldUsername, String newUsername) throws SQLException {
+		String query = "UPDATE posts SET author = ? WHERE author = ?";
+
+        PreparedStatement statement = connection.prepareStatement(query);
+        statement.setString(1, newUsername);
+        statement.setString(2, oldUsername);
+        statement.executeUpdate();
+        
+        statement.close();
 	}
 }

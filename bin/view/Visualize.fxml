@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.chart.PieChart?>
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.VisualizeController">
+   <children>
+     <Pane prefHeight="70.0" prefWidth="800.0" style="-fx-background-color: #f5f5f5;">
+         <children>
+            <Label layoutX="308.0" layoutY="20.0" text="Assignment 2" textFill="#cc0630">
+               <font>
+                  <Font name="System Bold" size="24.0" />
+               </font>
+            </Label>
+            <Hyperlink focusTraversable="false" layoutX="28.0" layoutY="24.0" onAction="#handleBack" text="Back">
+               <font>
+                  <Font name="Fira Sans Bold" size="18.0" />
+               </font>
+            </Hyperlink>
+         </children>
+      </Pane>
+      <PieChart fx:id="pieChart" layoutY="71.0" prefHeight="529.0" prefWidth="800.0" />
+   </children>
+</AnchorPane>

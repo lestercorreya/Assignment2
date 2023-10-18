@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 import application.DatabaseConnection;
+import dao.PostDao;
 import dao.UserDao;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -72,6 +73,7 @@ public class EditProfileController implements Initializable{
 
 			Connection conn = DatabaseConnection.getConnection();
 		    UserDao userDao = new UserDao(conn);
+		    PostDao postDao = new PostDao(conn);
 			
 			if (!username.equals(oldUsername)) {
 			    if (userDao.getUser(username) != null) {
@@ -79,10 +81,12 @@ public class EditProfileController implements Initializable{
 			    	conn.close();
 					return;
 			    }
+			    
+			    postDao.changeUsername(oldUsername, username);
 			}
 			
-			
-		    User user = new User(username, password, firstName, lastName, "user");
+		    User oldUser = userDao.getUser(oldUsername);
+		    User user = new User(username, password, firstName, lastName, oldUser.getRole());
 		    userDao.updateUser(user, oldUsername);
 		    
 		    conn.close();
@@ -91,7 +95,7 @@ public class EditProfileController implements Initializable{
 	        successText.setText("Profile details are in sync!");
 	        
 		} catch (SQLException e) {
-			errorText.setText("There was an error in Signing Up. Please try again!");
+			errorText.setText("There was an error in Editing the profile. Please try again!");
 			e.printStackTrace();
 		}
 	}
