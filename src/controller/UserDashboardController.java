@@ -76,6 +76,12 @@ public class UserDashboardController implements Initializable {
 		RetrievePostController retrievePostController = new RetrievePostController();
 		retrievePostController.openRetrievePost(event);
 	}
+	
+	@FXML
+	private void handleRemovePost(ActionEvent event) {
+		RemovePostController removePostController = new RemovePostController();
+		removePostController.openRemovePost(event);
+	}
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {

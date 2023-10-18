@@ -58,7 +58,7 @@
          <children>
             <Button mnemonicParsing="false" text="Retrieve Top N Posts" />
             <Button mnemonicParsing="false" text="Retrieve Post" onAction="#handleRetrievePost"/>
-            <Button mnemonicParsing="false" text="Remove Post" />
+            <Button mnemonicParsing="false" text="Remove Post" onAction="#handleRemovePost"/>
          </children>
       </HBox>
    </children>

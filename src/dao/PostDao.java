@@ -31,6 +31,21 @@ public class PostDao {
         statement.close();
     }
 	
+	public boolean deletePost(String ID) throws SQLException {
+        String query = "DELETE FROM posts WHERE ID = ?";
+
+        PreparedStatement statement = connection.prepareStatement(query);
+        statement.setString(1, ID);
+        int rowsAffected = statement.executeUpdate();
+        
+        statement.close();
+        if (rowsAffected > 0) {
+        	return true;
+        } else {
+        	return false;        	
+        }
+    }
+	
 	public ArrayList<Post> getPosts() throws SQLException {
 		ArrayList<Post> posts = new ArrayList<>();
         String query = "SELECT * FROM posts";

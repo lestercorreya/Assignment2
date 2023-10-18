@@ -61,10 +61,17 @@ public class RetrievePostController implements Initializable {
 	private void retrievePost(ActionEvent event) {
 		errorText.setText(null);
 		try {
+			String ID = IDField.getText();
+			
+			if (ID.trim().length() == 0) {
+				errorText.setText("All fields are mandatory");
+				return;
+			}
+			
 			Connection conn = DatabaseConnection.getConnection();
 			PostDao postDao = new PostDao(conn);
 			
-			Post post = postDao.getPost(IDField.getText());
+			Post post = postDao.getPost(ID);
 			
 			if (post == null) {
 				errorText.setText("Post with this ID doesn't exist!");
