@@ -1,6 +1,6 @@
 package controller;
 
-import java.util.UUID;
+import java.util.Random;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -80,9 +80,10 @@ public class AddPostController {
 			User user = userDao.getUser(UserDashboardController.getUsername());
 			PostDao postDao = new PostDao(conn);
 			
-			UUID uniqueID = UUID.randomUUID();
+			Random random = new Random();
+			int ID = random.nextInt(99999 - 10000 + 1) + 10000;
 			
-		    Post post = new Post(uniqueID.toString(), user, content, Integer.parseInt(likes), Integer.parseInt(shares), formattedDateTime);
+		    Post post = new Post(ID, user, content, Integer.parseInt(likes), Integer.parseInt(shares), formattedDateTime);
 		    postDao.createPost(post);
 		    
 		    conn.close();

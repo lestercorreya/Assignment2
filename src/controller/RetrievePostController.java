@@ -69,10 +69,17 @@ public class RetrievePostController implements Initializable {
 				return;
 			}
 			
+			String validNumberRegex = "^[0-9]+$";
+
+			if (!ID.matches(validNumberRegex)) {
+				errorText.setText("Entered Post ID is invalid!");
+				return;
+			}
+			
 			Connection conn = DatabaseConnection.getConnection();
 			PostDao postDao = new PostDao(conn);
 			
-			Post post = postDao.getPost(ID);
+			Post post = postDao.getPost(Integer.parseInt(ID));
 			
 			if (post == null) {
 				errorText.setText("Post with this ID doesn't exist!");

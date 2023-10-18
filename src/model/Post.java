@@ -1,7 +1,7 @@
 package model;
 
 public class Post {
-	private String id;
+	private int id;
     private User author;
     private String content;
     private int likes;
@@ -9,7 +9,7 @@ public class Post {
     private String dateTime;
     private String authorUsername;
 
-    public Post(String id, User author, String content, int likes, int shares, String dateTime) {
+    public Post(int id, User author, String content, int likes, int shares, String dateTime) {
         this.id = id;
         this.author = author;
         this.content = content;
@@ -20,11 +20,11 @@ public class Post {
     }
 
     // Getters and setters for each field
-    public String getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 

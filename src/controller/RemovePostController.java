@@ -51,10 +51,17 @@ public class RemovePostController {
 				return;
 			}
 			
+			String validNumberRegex = "^[0-9]+$";
+
+			if (!ID.matches(validNumberRegex)) {
+				errorText.setText("Entered Post ID is invalid!");
+				return;
+			}
+			
 			Connection conn = DatabaseConnection.getConnection();
 			PostDao postDao = new PostDao(conn);
 			
-			boolean deletionSuccess = postDao.deletePost(ID, username);
+			boolean deletionSuccess = postDao.deletePost(Integer.parseInt(ID), username);
 			
 			if (!deletionSuccess) {
 				errorText.setText("Post with this ID doesn't exist or the post doesn't belong to you!");

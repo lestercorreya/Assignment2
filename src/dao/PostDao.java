@@ -20,7 +20,7 @@ public class PostDao {
         String query = "INSERT INTO posts (id, author, content, likes, shares, dateTime) VALUES (?, ?, ?, ?, ?, ?)";
 
         PreparedStatement statement = connection.prepareStatement(query);
-        statement.setString(1, post.getId());
+        statement.setInt(1, post.getId());
         statement.setString(2, post.getAuthor().getUsername());
         statement.setString(3, post.getContent());
         statement.setInt(4, post.getLikes());
@@ -31,11 +31,11 @@ public class PostDao {
         statement.close();
     }
 	
-	public boolean deletePost(String ID, String username) throws SQLException {
+	public boolean deletePost(int ID, String username) throws SQLException {
         String query = "DELETE FROM posts WHERE ID = ? and author = ?";
 
         PreparedStatement statement = connection.prepareStatement(query);
-        statement.setString(1, ID);
+        statement.setInt(1, ID);
         statement.setString(2, username);
         
         int rowsAffected = statement.executeUpdate();
@@ -56,7 +56,7 @@ public class PostDao {
         ResultSet resultSet = statement.executeQuery();
         
         while (resultSet.next()) {
-        	String ID = resultSet.getString("ID");
+        	int ID = resultSet.getInt("ID");
         	String username = resultSet.getString("author");
         	String content = resultSet.getString("content");
         	int likes = resultSet.getInt("likes");
@@ -74,11 +74,11 @@ public class PostDao {
         return posts;
     }
 	
-	public Post getPost(String ID) throws SQLException {
+	public Post getPost(int ID) throws SQLException {
 		String query = "SELECT * FROM posts WHERE ID = ?";
 
         PreparedStatement statement = connection.prepareStatement(query);
-        statement.setString(1, ID);
+        statement.setInt(1, ID);
         ResultSet resultSet = statement.executeQuery();
         
         if (resultSet.next()) {
