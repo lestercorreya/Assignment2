@@ -72,7 +72,7 @@ public class AddPostController {
 			}
 			
 			LocalDateTime dateTime = LocalDateTime.now();
-			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 	        String formattedDateTime = dateTime.format(formatter);
 	        
 			Connection conn = DatabaseConnection.getConnection();

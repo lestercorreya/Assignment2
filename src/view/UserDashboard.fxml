@@ -63,7 +63,7 @@
             <Button mnemonicParsing="false" onAction="#handleRetrieveNPosts" text="Retrieve Top N Posts" />
             <Button mnemonicParsing="false" onAction="#handleRetrievePost" text="Retrieve Post" />
             <Button mnemonicParsing="false" onAction="#handleRemovePost" text="Remove Post" />
-            <Button mnemonicParsing="false" text="Import" fx:id="importButton"/>
+            <Button mnemonicParsing="false" text="Import" fx:id="importButton" onAction="#handleImport"/>
          </children>
       </HBox>
    </children>

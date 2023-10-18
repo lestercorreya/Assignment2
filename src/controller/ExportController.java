@@ -84,8 +84,8 @@ public class ExportController {
 			 
 			FileWriter fileWriter = new FileWriter(selectedFile);
 		    StringBuilder csvData = new StringBuilder();
-		    List<String> columnHeaders = List.of("ID", "author", "content", "likes", "shares", "dateTime");
-		    List<String> columnRow = List.of(Integer.toString(post.getId()), post.getAuthor().getUsername(),post.getContent(), Integer.toString(post.getLikes()), Integer.toString(post.getShares()), post.getDateTime());
+		    List<String> columnHeaders = List.of("ID", "content", "author", "likes", "shares", "dateTime");
+		    List<String> columnRow = List.of(Integer.toString(post.getId()), post.getContent(), post.getAuthor().getUsername(), Integer.toString(post.getLikes()), Integer.toString(post.getShares()), post.getDateTime());
 		    for (String item : columnHeaders) {
                 csvData.append(item).append(",");
             }

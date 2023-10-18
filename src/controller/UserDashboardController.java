@@ -125,6 +125,12 @@ public class UserDashboardController implements Initializable {
 		VisualizeController visualizeController = new VisualizeController();
 		visualizeController.openVisualize(event);
 	}
+	
+	@FXML
+	private void handleImport(ActionEvent event) {
+		ImportController importController = new ImportController();
+		importController.openImport(event);
+	}
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
