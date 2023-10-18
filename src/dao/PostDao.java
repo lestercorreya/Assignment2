@@ -52,6 +52,37 @@ public class PostDao {
         	posts.add(new Post(ID, author, content, likes, shares, dateTime));
         }
         
+        statement.close();
+        
         return posts;
     }
+	
+	public Post getPost(String ID) throws SQLException {
+		String query = "SELECT * FROM posts WHERE ID = ?";
+
+        PreparedStatement statement = connection.prepareStatement(query);
+        statement.setString(1, ID);
+        ResultSet resultSet = statement.executeQuery();
+        
+        if (resultSet.next()) {
+        	String username = resultSet.getString("author");
+        	String content = resultSet.getString("content");
+        	int likes = resultSet.getInt("likes");
+        	int shares = resultSet.getInt("shares");
+        	String dateTime = resultSet.getString("dateTime");
+        	
+        	UserDao userDao = new UserDao(connection);
+        	User author = userDao.getUser(username);
+        	
+        	Post post = new Post(ID, author, content, likes, shares, dateTime);
+        	
+            statement.close();
+            
+            return post;
+        }
+        
+        statement.close();
+        
+        return null;
+	}
 }

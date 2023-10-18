@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import application.DatabaseConnection;
@@ -21,14 +20,12 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import model.Post;
 
-public class UserDashboardController implements Initializable {
-	@FXML
-	private Label usernameGreetingLabel;
-	
+public class RetrievePostController implements Initializable {
 	@FXML
 	private TableView<Post> postsTable;
 	
@@ -38,45 +35,58 @@ public class UserDashboardController implements Initializable {
 	@FXML
 	private TableColumn<Post, Integer> likesColumn, sharesColumn;
 	
+	@FXML
+	private TextField IDField;
+	
+	@FXML
+	private Label errorText;
+	
 	ObservableList<Post> posts = FXCollections.observableArrayList();
-	private static String username;
 	
-	public static String getUsername() {
-		return username;
-	}
-	
-	public static void setUsername(String username) {
-		UserDashboardController.username = username;
-	}
-	
-	public void openUserDashboard(ActionEvent event) {
+	public void openRetrievePost(ActionEvent event) {
 		try {
-			FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/UserDashboard.fxml"));
-			Parent root = loader.load();
-			UserDashboardController userDashboardController = loader.getController();
-			userDashboardController.usernameGreetingLabel.setText("Hello, " + username);
+			Parent root = FXMLLoader.load(getClass().getResource("/view/RetrievePost.fxml"));
 			Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
 			Scene scene = new Scene(root);
-			scene.getStylesheets().add(getClass().getResource("/styles/userDashboard.css").toExternalForm());
+			scene.getStylesheets().add(getClass().getResource("/styles/retrievePost.css").toExternalForm());
 			stage.setScene(scene);
 			stage.show();
 		} catch (IOException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 	
 	@FXML
-	private void handleAddPost(ActionEvent event) {
-		AddPostController addPostController = new AddPostController();
-		addPostController.openAddPost(event);
+	private void retrievePost(ActionEvent event) {
+		errorText.setText(null);
+		try {
+			Connection conn = DatabaseConnection.getConnection();
+			PostDao postDao = new PostDao(conn);
+			
+			Post post = postDao.getPost(IDField.getText());
+			
+			if (post == null) {
+				errorText.setText("Post with this ID doesn't exist!");
+				conn.close();
+				return;
+			}
+			
+			conn.close();
+			
+			posts.add(post);
+		} catch (SQLException e) {
+			errorText.setText("An Error Occured!");
+			e.printStackTrace();
+		}
 	}
 	
 	@FXML
-	private void handleRetrievePost(ActionEvent event) {
-		RetrievePostController retrievePostController = new RetrievePostController();
-		retrievePostController.openRetrievePost(event);
+	private void handleBack(ActionEvent event) {
+		UserDashboardController userDashboardController = new UserDashboardController();
+		userDashboardController.openUserDashboard(event);
 	}
-
+	
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		IDColumn.setCellValueFactory(new PropertyValueFactory<Post, String>("id"));
@@ -85,17 +95,6 @@ public class UserDashboardController implements Initializable {
 		likesColumn.setCellValueFactory(new PropertyValueFactory<Post, Integer>("likes"));
 		sharesColumn.setCellValueFactory(new PropertyValueFactory<Post, Integer>("shares"));
 		dateTimeColumn.setCellValueFactory(new PropertyValueFactory<Post, String>("dateTime"));
-		
-		Connection conn = DatabaseConnection.getConnection();
-		PostDao postDao = new PostDao(conn);
-		
-		try {
-			ArrayList<Post> postsResult = postDao.getPosts();
-			
-			posts.addAll(postsResult);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
 		
 		postsTable.setItems(posts);
 	}
