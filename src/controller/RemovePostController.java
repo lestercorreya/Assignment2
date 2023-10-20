@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 import application.DatabaseConnection;
+import dao.PostDaoImpl;
 import dao.PostDao;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -16,6 +17,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
+//class that deals with all methods related to the remove post page
 public class RemovePostController {
 	@FXML
 	private TextField IDField;
@@ -46,6 +48,7 @@ public class RemovePostController {
 			String ID = IDField.getText();
 			String username = UserDashboardController.getUsername();
 			
+			//conducting field validations
 			if (ID.trim().length() == 0) {
 				errorText.setText("All fields are mandatory");
 				return;
@@ -59,9 +62,9 @@ public class RemovePostController {
 			}
 			
 			Connection conn = DatabaseConnection.getConnection();
-			PostDao postDao = new PostDao(conn);
+			PostDao postDao = new PostDaoImpl(conn);
 			
-			boolean deletionSuccess = postDao.deletePost(Integer.parseInt(ID), username);
+			boolean deletionSuccess = postDao.deletePost(Integer.parseInt(ID), username); //deleting the post and returning boolean status of deletion
 			
 			if (!deletionSuccess) {
 				errorText.setText("Post with this ID doesn't exist or the post doesn't belong to you!");

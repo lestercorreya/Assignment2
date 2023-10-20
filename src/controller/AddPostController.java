@@ -8,7 +8,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 import application.DatabaseConnection;
-import dao.PostDao;
+import dao.PostDaoImpl;
+import dao.UserDaoImpl;
 import dao.UserDao;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -23,6 +24,7 @@ import javafx.stage.Stage;
 import model.Post;
 import model.User;
 
+//this class deals with all the methods related to the add post page
 public class AddPostController {
 	@FXML
 	private TextField likesField, sharesField;
@@ -31,6 +33,7 @@ public class AddPostController {
 	@FXML
 	private Label errorText, successText;
 	
+	//logic for opening the add post page
 	public void openAddPost(ActionEvent event) {
 		try {
 			Parent root = FXMLLoader.load(getClass().getResource("/view/AddPost.fxml"));
@@ -44,6 +47,7 @@ public class AddPostController {
 		}
 	}
 	
+	//method to add the post to the database
 	@FXML
 	private void addPost(ActionEvent event) {
 		try {
@@ -54,6 +58,7 @@ public class AddPostController {
 			String likes = likesField.getText();
 			String shares = sharesField.getText();
 			
+			//conducting field validations
 			if (content.trim().length() == 0 || likes.trim().length() == 0 || shares.trim().length() == 0) {
 				errorText.setText("All fields are mandatory");
 				return;
@@ -72,37 +77,39 @@ public class AddPostController {
 			}
 			
 			LocalDateTime dateTime = LocalDateTime.now();
-			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"); //creating a dateTime with the specified format for the new post
 	        String formattedDateTime = dateTime.format(formatter);
 	        
 			Connection conn = DatabaseConnection.getConnection();
-			UserDao userDao = new UserDao(conn);
+			UserDao userDao = new UserDaoImpl(conn);
 			User user = userDao.getUser(UserDashboardController.getUsername());
-			PostDao postDao = new PostDao(conn);
+			PostDaoImpl postDao = new PostDaoImpl(conn);
 			
 			Random random = new Random();
-			int ID = random.nextInt(99999 - 10000 + 1) + 10000;
+			int ID = random.nextInt(99999 - 10000 + 1) + 10000; // creating a random 5 digit ID for the new post
 			
 		    Post post = new Post(ID, user, content, Integer.parseInt(likes), Integer.parseInt(shares), formattedDateTime);
 		    postDao.createPost(post);
 		    
 		    conn.close();
 	        
-	        successText.setText("Post Added Successfully!");
+	        successText.setText("Post Added Successfully!"); //displaying the success message
 	        emptyFields();
 	        
 		} catch (SQLException e) {
-			errorText.setText("There was an error in Signing Up. Please try again!");
+			errorText.setText("There was an error in Signing Up. Please try again!"); //displaying the error message if there was an error
 			e.printStackTrace();
 		}
 	}
 	
+	//Method to handle back to open user dashboard page
 	@FXML
 	private void handleBack(ActionEvent event) {
 		UserDashboardController userDashboardController = new UserDashboardController();
 		userDashboardController.openUserDashboard(event);
 	}
 	
+	//Method to empty the fields after a post is added
 	private void emptyFields() {
 		contentField.clear();
         likesField.clear();

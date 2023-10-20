@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import application.DatabaseConnection;
+import dao.PostDaoImpl;
 import dao.PostDao;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -23,6 +24,7 @@ import javafx.scene.chart.PieChart.Data;
 import javafx.stage.Stage;
 import model.Post;
 
+//controller to handle all the methods related to the visualize page
 public class VisualizeController implements Initializable{
 	@FXML
 	private PieChart pieChart;
@@ -47,13 +49,14 @@ public class VisualizeController implements Initializable{
 		UserDashboardController userDashboardController = new UserDashboardController();
 		userDashboardController.openUserDashboard(event);
 	}
-
+	
+	//initializing the page with a pie chart that displays the distribution of shares for all the posts into 3 categories
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		try {
 			Connection conn = DatabaseConnection.getConnection();
 			
-			PostDao postDao = new PostDao(conn);
+			PostDao postDao = new PostDaoImpl(conn);
 			
 			ArrayList<Post> postsResult = postDao.getPosts();
 			

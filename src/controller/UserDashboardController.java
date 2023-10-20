@@ -8,8 +8,10 @@ import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import application.DatabaseConnection;
-import dao.PostDao;
+import dao.PostDaoImpl;
+import dao.UserDaoImpl;
 import dao.UserDao;
+import dao.PostDao;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -28,6 +30,7 @@ import javafx.stage.Stage;
 import model.Post;
 import model.User;
 
+//controller that deals with all the methods related to the user dashboard page
 public class UserDashboardController implements Initializable {
 	@FXML
 	private Label usernameGreetingLabel;
@@ -51,6 +54,7 @@ public class UserDashboardController implements Initializable {
 		return username;
 	}
 	
+	//method to set the username as a static variable so the entire application can use it
 	public static void setUsername(String username) {
 		UserDashboardController.username = username;
 	}
@@ -71,6 +75,7 @@ public class UserDashboardController implements Initializable {
 		}
 	}
 	
+	//handlers for all the funtionalities
 	@FXML
 	private void handleAddPost(ActionEvent event) {
 		AddPostController addPostController = new AddPostController();
@@ -131,13 +136,14 @@ public class UserDashboardController implements Initializable {
 		ImportController importController = new ImportController();
 		importController.openImport(event);
 	}
-
+	
+	//initializing the page by populating the tableview with all the available posts
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		try {
 			Connection conn = DatabaseConnection.getConnection();
 			
-			UserDao userDao = new UserDao(conn);
+			UserDao userDao = new UserDaoImpl(conn);
 			User user = userDao.getUser(username);
 			
 			if (user.getRole().equals("user")) {
@@ -154,7 +160,7 @@ public class UserDashboardController implements Initializable {
 			sharesColumn.setCellValueFactory(new PropertyValueFactory<Post, Integer>("shares"));
 			dateTimeColumn.setCellValueFactory(new PropertyValueFactory<Post, String>("dateTime"));
 			
-			PostDao postDao = new PostDao(conn);
+			PostDao postDao = new PostDaoImpl(conn);
 			
 			ArrayList<Post> postsResult = postDao.getPosts();
 			

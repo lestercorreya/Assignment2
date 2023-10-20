@@ -11,6 +11,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import application.DatabaseConnection;
+import dao.PostDaoImpl;
+import dao.UserDaoImpl;
 import dao.PostDao;
 import dao.UserDao;
 import javafx.event.ActionEvent;
@@ -27,6 +29,7 @@ import javafx.stage.Stage;
 import model.Post;
 import model.User;
 
+//class that handles all methods related to import posts from csv file page
 public class ImportController {
 	@FXML
 	private TextField IDField;
@@ -34,6 +37,7 @@ public class ImportController {
 	@FXML
 	private Label errorText, successText;
 	
+	//method to open the import page
 	public void openImport(ActionEvent event) {
 		try {
 			Parent root = FXMLLoader.load(getClass().getResource("/view/Import.fxml"));
@@ -59,7 +63,7 @@ public class ImportController {
 		successText.setText(null);
 		
 		FileChooser fileChooser = new FileChooser();
-		fileChooser.getExtensionFilters().add(new ExtensionFilter("CSV files", "*.csv"));
+		fileChooser.getExtensionFilters().add(new ExtensionFilter("CSV files", "*.csv")); //setting filechooser filters to only show csv files
 		Stage stage = (Stage)((Node)event.getSource()).getScene().getWindow();
 		File selectedFile = fileChooser.showOpenDialog(stage);
 		ArrayList<Post> posts = new ArrayList<>();
@@ -67,6 +71,7 @@ public class ImportController {
 		if (selectedFile != null) {
             Connection conn = DatabaseConnection.getConnection();
             
+            //logic to read contents from the csv file
 			try (BufferedReader br = new BufferedReader(new FileReader(selectedFile))) {
 				String line;
 				boolean firstLine = true; 
@@ -86,7 +91,8 @@ public class ImportController {
 	            	String dateTime = fields[5];
 	            	
 	            	String validNumberRegex = "^[0-9]+$";
-
+	            	
+	            	//conducting requried validations
 	    			if (!ID.matches(validNumberRegex) || !likes.matches(validNumberRegex) || !shares.matches(validNumberRegex)) {
 	    				errorText.setText("Invalid format error on post with ID: " + ID);
 	    				conn.close();
@@ -104,7 +110,7 @@ public class ImportController {
 	    				return;
 	                }
 	                
-	    			UserDao userDao = new UserDao(conn);
+	    			UserDao userDao = new UserDaoImpl(conn);
 	    			
 	    			User user = userDao.getUser(author);
 	    			
@@ -116,13 +122,13 @@ public class ImportController {
 	                
 	                Post post = new Post(Integer.parseInt(ID), user, content, Integer.parseInt(likes), Integer.parseInt(shares), dateTime);
 	                
-	                posts.add(post);
+	                posts.add(post); //appeding the post to the posts collection
 	            }
 	            
-    			PostDao postDao = new PostDao(conn);
+    			PostDao postDao = new PostDaoImpl(conn);
     			
 	            for (Post post : posts) {
-                    postDao.createPost(post);
+                    postDao.createPost(post); //adding posts to the database
                 }
 	            
 	            conn.close();

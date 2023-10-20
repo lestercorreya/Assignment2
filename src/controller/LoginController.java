@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 import application.DatabaseConnection;
+import dao.UserDaoImpl;
 import dao.UserDao;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -17,6 +18,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
+//class that handles all methods related to the Login page
 public class LoginController {
 	@FXML
 	private TextField usernameField;
@@ -25,6 +27,7 @@ public class LoginController {
 	@FXML
 	private Label errorText;
 	
+	//Method that opens the Signup page when the signup hyperlink is clicked
 	@FXML
 	private void handleSignupHyperlink(ActionEvent event) {
 		SignupController signupController = new SignupController();
@@ -58,8 +61,9 @@ public class LoginController {
 			
 
 			Connection conn = DatabaseConnection.getConnection();
-			UserDao userDao = new UserDao(conn);
+			UserDao userDao = new UserDaoImpl(conn);
 		    
+			//checking if the login details are valid
 		    if (userDao.getUser(username, password) == null) {
 		    	errorText.setText("Invalid login credentials!");
 		    	conn.close();

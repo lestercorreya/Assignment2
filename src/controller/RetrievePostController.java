@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 import application.DatabaseConnection;
+import dao.PostDaoImpl;
 import dao.PostDao;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -25,6 +26,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import model.Post;
 
+//controller that deals with all methods related to the retrieve Post page
 public class RetrievePostController implements Initializable {
 	@FXML
 	private TableView<Post> postsTable;
@@ -64,6 +66,7 @@ public class RetrievePostController implements Initializable {
 		try {
 			String ID = IDField.getText();
 			
+			//conducting field validations
 			if (ID.trim().length() == 0) {
 				errorText.setText("All fields are mandatory");
 				return;
@@ -77,7 +80,7 @@ public class RetrievePostController implements Initializable {
 			}
 			
 			Connection conn = DatabaseConnection.getConnection();
-			PostDao postDao = new PostDao(conn);
+			PostDao postDao = new PostDaoImpl(conn);
 			
 			Post post = postDao.getPost(Integer.parseInt(ID));
 			
@@ -104,6 +107,7 @@ public class RetrievePostController implements Initializable {
 	
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
+		//setting the column attributes for the tableview
 		IDColumn.setCellValueFactory(new PropertyValueFactory<Post, String>("id"));
 		authorColumn.setCellValueFactory(new PropertyValueFactory<Post, String>("author"));
 		contentColumn.setCellValueFactory(new PropertyValueFactory<Post, String>("content"));
@@ -111,6 +115,6 @@ public class RetrievePostController implements Initializable {
 		sharesColumn.setCellValueFactory(new PropertyValueFactory<Post, Integer>("shares"));
 		dateTimeColumn.setCellValueFactory(new PropertyValueFactory<Post, String>("dateTime"));
 		
-		postsTable.setItems(posts);
+		postsTable.setItems(posts); //setting the observable list to the tableview
 	}
 }

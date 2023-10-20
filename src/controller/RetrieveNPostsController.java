@@ -10,6 +10,7 @@ import java.util.Comparator;
 import java.util.ResourceBundle;
 
 import application.DatabaseConnection;
+import dao.PostDaoImpl;
 import dao.PostDao;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -28,6 +29,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import model.Post;
 
+//class to handle all methods related to the RetrievePostsController
 public class RetrieveNPostsController implements Initializable{
 	@FXML
 	private TableView<Post> postsTable;
@@ -67,6 +69,7 @@ public class RetrieveNPostsController implements Initializable{
 		try {
 			String N = NField.getText();
 			
+			//conducting field validations
 			if (N.trim().length() == 0) {
 				errorText.setText("All fields are mandatory");
 				return;
@@ -80,10 +83,11 @@ public class RetrieveNPostsController implements Initializable{
 			}
 			
 			Connection conn = DatabaseConnection.getConnection();
-			PostDao postDao = new PostDao(conn);
+			PostDao postDao = new PostDaoImpl(conn);
 			
 			ArrayList<Post> resultPosts = postDao.getPosts();
 			
+			//sorting the posts based on number of likes in the decending order
 			Collections.sort(resultPosts, new Comparator<Post>() {
 	            @Override
 	            public int compare(Post post1, Post post2) {
@@ -92,14 +96,15 @@ public class RetrieveNPostsController implements Initializable{
 	        });
 			
 			ArrayList<Post> topNPosts = new ArrayList<>();
-
+			
+			//filtering out the top N posts with most likes
 	        for (int i = 0; i < Integer.parseInt(N) && i < resultPosts.size(); i++) {
 	            topNPosts.add(resultPosts.get(i));
 	        }
 	        
 			conn.close();
 			
-			posts.addAll(topNPosts);
+			posts.addAll(topNPosts); //adding it to the observable lists so it can be displayed by the table
 		} catch (SQLException e) {
 			errorText.setText("An Error Occured!");
 			e.printStackTrace();
@@ -114,6 +119,7 @@ public class RetrieveNPostsController implements Initializable{
 	
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
+		//setting all the column attributes of the table
 		IDColumn.setCellValueFactory(new PropertyValueFactory<Post, String>("id"));
 		authorColumn.setCellValueFactory(new PropertyValueFactory<Post, String>("author"));
 		contentColumn.setCellValueFactory(new PropertyValueFactory<Post, String>("content"));
@@ -121,6 +127,6 @@ public class RetrieveNPostsController implements Initializable{
 		sharesColumn.setCellValueFactory(new PropertyValueFactory<Post, Integer>("shares"));
 		dateTimeColumn.setCellValueFactory(new PropertyValueFactory<Post, String>("dateTime"));
 		
-		postsTable.setItems(posts);
+		postsTable.setItems(posts); //setting the observable list to the table
 	}
 }

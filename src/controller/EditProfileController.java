@@ -7,8 +7,10 @@ import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 import application.DatabaseConnection;
-import dao.PostDao;
+import dao.PostDaoImpl;
 import dao.UserDao;
+import dao.PostDao;
+import dao.UserDaoImpl;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -22,6 +24,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import model.User;
 
+// this Controller deals with all methods related to the edit profile page
 public class EditProfileController implements Initializable{
 	@FXML
 	private TextField usernameField, firstNameField, lastNameField;
@@ -32,6 +35,7 @@ public class EditProfileController implements Initializable{
 	@FXML
 	private Label errorText, successText;
 	
+	//method to open the edit profile page
 	public void openEditProfile(ActionEvent event) {
 		try {
 			Parent root = FXMLLoader.load(getClass().getResource("/view/EditProfile.fxml"));
@@ -45,6 +49,7 @@ public class EditProfileController implements Initializable{
 		}
 	}
 	
+	//method to edit the profile and make changes to the database
 	@FXML
 	private void editProfile(ActionEvent event) {
 		try {
@@ -55,6 +60,7 @@ public class EditProfileController implements Initializable{
 			String password = passwordField.getText();
 			String confirmPassword = confirmPasswordField.getText();
 			
+			//conducting field validations
 			if (username.trim().length() == 0 || firstName.trim().length() == 0 || lastName.trim().length() == 0 || password.trim().length() == 0 || confirmPassword.trim().length() == 0) {
 				errorText.setText("All fields are mandatory");
 				return;
@@ -72,9 +78,10 @@ public class EditProfileController implements Initializable{
 			
 
 			Connection conn = DatabaseConnection.getConnection();
-		    UserDao userDao = new UserDao(conn);
-		    PostDao postDao = new PostDao(conn);
+		    UserDao userDao = new UserDaoImpl(conn);
+		    PostDao postDao = new PostDaoImpl(conn);
 			
+		    //checking if the old username and the newly entered usernames are the same, checking for availability of the new username if not
 			if (!username.equals(oldUsername)) {
 			    if (userDao.getUser(username) != null) {
 			    	errorText.setText("A user with this username already exists!");
@@ -92,27 +99,29 @@ public class EditProfileController implements Initializable{
 		    conn.close();
 	        
 		    UserDashboardController.setUsername(username);
-	        successText.setText("Profile details are in sync!");
+	        successText.setText("Profile details are in sync!"); //displaying the success message
 	        
 		} catch (SQLException e) {
-			errorText.setText("There was an error in Editing the profile. Please try again!");
+			errorText.setText("There was an error in Editing the profile. Please try again!"); //displying the error message if there was an error
 			e.printStackTrace();
 		}
 	}
 	
+	//Method to open userdashboard page if back button is clicked
 	@FXML
 	private void handleBack(ActionEvent event) {
 		UserDashboardController userDashboardController = new UserDashboardController();
 		userDashboardController.openUserDashboard(event);
 	}
-
+	
+	//overiding the initialize method to set the text on all fields by default when the page loads
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		String username = UserDashboardController.getUsername();
 		try {
 			Connection conn = DatabaseConnection.getConnection();
 			
-			UserDao userDao = new UserDao(conn);
+			UserDao userDao = new UserDaoImpl(conn);
 			User user = userDao.getUser(username);
 			
 			usernameField.setText(username);

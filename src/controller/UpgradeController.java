@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 import application.DatabaseConnection;
+import dao.UserDaoImpl;
 import dao.UserDao;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -16,6 +17,7 @@ import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import model.User;
 
+//controller that deals with all methods related to the upgrade to VIP user page
 public class UpgradeController {
 	@FXML
 	private Label errorText;
@@ -46,9 +48,10 @@ public class UpgradeController {
 			
 			Connection conn = DatabaseConnection.getConnection();
 			
-			UserDao userDao = new UserDao(conn);
+			UserDao userDao = new UserDaoImpl(conn);
 			User user = userDao.getUser(username);
 			
+			//creating the vip user object and updating the entry in the database
 			User updatedUser = new User(user.getUsername(), user.getPassword(), user.getFirstName(), user.getLastName(), "vip");
 			userDao.updateUser(updatedUser, username);
 			

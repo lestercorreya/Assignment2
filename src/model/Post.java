@@ -1,6 +1,7 @@
 package model;
 
 public class Post {
+	//attributes
 	private int id;
     private User author;
     private String content;
@@ -9,6 +10,7 @@ public class Post {
     private String dateTime;
     private String authorUsername;
 
+    //constructor
     public Post(int id, User author, String content, int likes, int shares, String dateTime) {
         this.id = id;
         this.author = author;

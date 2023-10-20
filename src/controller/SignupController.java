@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 import application.DatabaseConnection;
+import dao.UserDaoImpl;
 import dao.UserDao;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -18,6 +19,7 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import model.User;
 
+//controller that deals with all methods related to the signup page
 public class SignupController {
     //	claiming access to the fxml variables
 	@FXML
@@ -52,6 +54,7 @@ public class SignupController {
 			String password = passwordField.getText();
 			String confirmPassword = confirmPasswordField.getText();
 			
+			//conducting field validations
 			if (username.trim().length() == 0 || firstName.trim().length() == 0 || lastName.trim().length() == 0 || password.trim().length() == 0 || confirmPassword.trim().length() == 0) {
 				errorText.setText("All fields are mandatory");
 				return;
@@ -68,7 +71,7 @@ public class SignupController {
 			}
 			
 			Connection conn = DatabaseConnection.getConnection();
-		    UserDao userDao = new UserDao(conn);
+		    UserDao userDao = new UserDaoImpl(conn);
 		    
 		    if (userDao.getUser(username) != null) {
 		    	errorText.setText("A user with this username already exists!");
@@ -76,11 +79,13 @@ public class SignupController {
 				return;
 		    }
 			
+		    //creating the user and adding the user to the database
 		    User user = new User(username, password, firstName, lastName, "user");
 		    userDao.createUser(user);
 		    
 		    conn.close();
 	        
+		    //opening the login page after signup
 	        LoginController loginController = new LoginController();
 			loginController.openLogin(event);
 	        
@@ -90,7 +95,7 @@ public class SignupController {
 		}
 	}
 	
-	
+	//opening the login page with the login hyperlink is clicked
 	@FXML
 	private void handleLoginHyperlink(ActionEvent event) {
 		LoginController loginController = new LoginController();

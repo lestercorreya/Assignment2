@@ -7,6 +7,8 @@ import javafx.scene.Scene;
 
 
 public class Main extends Application {
+	
+	//this method marks the initial point of the application which loads the login page
 	@Override
 	public void start(Stage stage) {
 		try {

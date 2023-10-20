@@ -1,12 +1,14 @@
 package model;
 
 public class User {
+	//attributes
 	private String username;
 	private String password;
     private String firstName;
     private String lastName;
     private String role;
-
+    
+    //constructor
     public User(String username, String password, String firstName, String lastName, String role) {
         this.username = username;
         this.password = password;
